@@ -1,0 +1,65 @@
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*> lists) { // by-reference դարձրել եմ by-value հնարավոր memory leak-ից խուսափելու համար
+        if(!lists.size())
+        {
+            return nullptr; 
+        }
+
+        ListNode* merged_list_head = new ListNode();
+        int min = 0;
+
+        for(int i = 0; i < lists.size(); ++i) //O(m)
+        {
+            if(lists[i] == nullptr)
+            {
+                lists.erase(lists.begin() + i); //Օ(m)
+                --i;
+                continue;
+            }
+            
+            if(lists[min] -> val > lists[i] -> val)
+            {
+                min = i;
+            }
+        } // O(n^2)
+
+        if(lists[min])
+        {
+            merged_list_head -> val  = lists[min]->val;
+            lists[min] = lists[min] -> next;
+        }
+        else
+        {
+            return nullptr;
+        }
+
+        ListNode* merged_list = merged_list_head;
+
+        while(lists.size()) // O(n) - լիստերի երկարություն
+        {
+            min = 0;
+            for(int i = 0; i < lists.size(); ++i) //O(m)
+            {
+                if(lists[i] == nullptr)
+                {
+                    lists.erase(lists.begin() + i);// O(m)
+                    --i;
+                    continue;
+                }
+                if(lists[min] -> val > lists[i] -> val)
+                {
+                    min = i;
+                }
+            }
+            if(lists[min])
+            {
+                merged_list -> next  = new ListNode(lists[min]->val);
+                merged_list = merged_list -> next;
+                lists[min] = lists[min] -> next;
+            }
+            
+        }
+        return merged_list_head;
+    }
+};
