@@ -1,3 +1,13 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*> lists) { // by-reference դարձրել եմ by-value հնարավոր memory leak-ից խուսափելու համար
@@ -8,50 +18,39 @@ public:
 
         ListNode* merged_list_head = new ListNode();
         int min = 0;
-
-        for(int i = 0; i < lists.size(); ++i) //O(m)
-        {
-            if(lists[i] == nullptr)
-            {
-                lists.erase(lists.begin() + i); //Օ(m)
-                --i;
-                continue;
-            }
-            
-            if(lists[min] -> val > lists[i] -> val)
-            {
-                min = i;
-            }
-        } // O(n^2)
-
-        if(lists[min])
-        {
-            merged_list_head -> val  = lists[min]->val;
-            lists[min] = lists[min] -> next;
-        }
-        else
-        {
-            return nullptr;
-        }
-
+        bool all_null = 1;
         ListNode* merged_list = merged_list_head;
 
-        while(lists.size()) // O(n) - լիստերի երկարություն
+        while(1)
         {
-            min = 0;
-            for(int i = 0; i < lists.size(); ++i) //O(m)
+            all_null = 1;
+            for(min = 0; min < lists.size(); ++min)
             {
-                if(lists[i] == nullptr)
-                {
-                    lists.erase(lists.begin() + i);// O(m)
-                    --i;
-                    continue;
-                }
-                if(lists[min] -> val > lists[i] -> val)
-                {
-                    min = i;
-                }
+               if(lists[min] != nullptr)//min = O(n)
+               {
+                   all_null = 0;
+                   break;
+               } 
             }
+
+            if(all_null)
+            {
+                break;
+            }
+
+            for(int i = min + 1; i < lists.size(); ++i) //O(n - min)
+            {
+                if(lists[i] != nullptr)
+                {
+                    
+                    if(lists[min] -> val > lists[i] -> val)
+                    {
+                        min = i;
+                    }
+                }
+                
+            }
+
             if(lists[min])
             {
                 merged_list -> next  = new ListNode(lists[min]->val);
@@ -60,6 +59,6 @@ public:
             }
             
         }
-        return merged_list_head;
+        return merged_list_head -> next;
     }
-};
+}; // k - լիստերի միջին երկարություն O((min + n - min)*k) = O(n*k)
