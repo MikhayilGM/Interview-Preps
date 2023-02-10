@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int count;
+        int number = 0;
+        for(int i = 0; i < sizeof(int)*8; ++i) // O(n)
+        {
+            count = 0;
+            for(int j = 0; j < nums.size(); ++j) // O(32)
+            {
+                count += bool(nums[j] & 1 << i); 
+            }
+
+            if(count % 3)
+            {
+                number |= 1 << i;
+            }
+        }
+
+        return number;
+    }
+}; // O(n * 32) = O(n)
