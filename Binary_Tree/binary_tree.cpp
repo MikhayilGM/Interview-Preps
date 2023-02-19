@@ -535,6 +535,7 @@ void Binary_Tree<T>::print_levelOrder()
     for (int i = 0; i <= height; i++)
     {
         print_levelOrderNode(root, i);
+        std::cout << std::endl;
     } 
     
 }
