@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+    vector<int> tmp;
+    tmp.push_back(1);
+    for(int i = 0; i < nums.size()-1; ++i) // O(n - 1)
+    {
+        cout << tmp.back() << " ";
+        tmp.push_back(tmp[i]*nums[i]);
+    }
+    cout << endl;
+    int P = 1;
+    for(int i = tmp.size() - 2; i >= 0; --i) // O(n - 1)
+    {
+        P *= nums[i+1];
+        tmp[i] *= P;
+    }
+    return tmp;
+};
